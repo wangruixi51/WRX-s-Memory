@@ -1,0 +1,1031 @@
+<html lang="zh-CN"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设计师作品集 | Wang's Memory</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- GSAP 动画库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#111111',
+                        secondary: '#333333',
+                        accent: '#0066ff',
+                        light: '#f5f5f5',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    transitionProperty: {
+                        'height': 'height',
+                        'spacing': 'margin, padding',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-balance {
+                text-wrap: balance;
+            }
+            .text-shadow {
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            }
+            .transition-transform {
+                transition-property: transform;
+                transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+                transition-duration: 300ms;
+            }
+            .hover-scale {
+                @apply hover:scale-105 transition-transform duration-300;
+            }
+            .card-shadow {
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            }
+            .nav-shadow {
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            }
+        }
+    </style>
+    
+    <style>
+        /* 自定义滚动区域的自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        
+        /* 平滑区域的动画 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        
+        .fade-in.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* 作品卡片悬停效果 */
+        .work-card {
+            transition: all 0.3s ease;
+        }
+        
+        .work-card:hover .work-overlay {
+            opacity: 1;
+        }
+        
+        .work-overlay {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        /* 导航栏滚动效果 */
+        .navbar-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 50;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-white text-primary font-sans">
+    <!-- 导航栏 -->
+    <nav id="navbar" class="navbar-fixed bg-white bg-opacity-95 nav-shadow py-4">
+        <div class="container mx-auto px-4 md:px-8">
+            <div class="flex justify-between-between items-center">
+                <a href="#" class="text-2xl font-bold text-primary">Wang‘s Memory</a>
+                
+                <!-- 桌面导航 -->
+                <div class="hidden md:flex ml-auto space-x-8">
+                    <a href="#home" class="text-secondary hover:text-accent transition-colors">主页</a>
+                    <a href="#works" class="text-secondary hover:text-accent transition-colors">我的回忆</a>
+                    <a href="#about" class="text-secondary hover:text-accent transition-colors">关于我</a>
+                    <a href="#summary" class="text-secondary hover:text-accent transition-colors">我的总结</a>
+                </div>
+                
+                <!-- 移动端菜单按钮 -->
+                <button id="menu-toggle" class="md:hidden ml-auto text-primary focus:outline-none">
+                    <i class="fa fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 移动端导航菜单 -->
+        <div id="mobile-menu" class="md:hidden bg-white hidden absolute top-full left-0 w-full border-t border-gray-100">
+            <div class="container mx-auto px-4 py-4">
+                <a href="#home" class="block py-2 text-secondary hover:text-accent">主页</a>
+                <a href="#works" class="block py-2 text-secondary hover:text-accent">我的回忆</a>
+                <a href="#about" class="block py-2 text-secondary hover:text-accent">关于我</a>
+                    <a href="#summary" class="block py-2 text-secondary hover:text-accent">我的总结</a>
+
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero 区域 -->
+    <section id="home" class="min-h-screen flex items-center pt-16">
+        <div class="container mx-auto px-4 py-16">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-12">
+                <!-- 左侧文字内容 -->
+                <div class="max-w-3xl md:w-1/2">
+                    <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight" style="font-size: 48px; text-align: left; line-height: 60px;">Hi, 我是王睿熙</h1>
+                    <p class="text-xl md:text-2xl text-gray-600 mb-8" style="font-size: 18px; line-height: 27px; color: rgb(33, 35, 38); text-align: left;">欢迎来到我的回忆总结</p>
+                    <div class="flex space-x-12">
+                        <a href="#works" class="px-8 py-3 bg-black text-white font-medium rounded-md hover:bg-gray-800 transition duration-300">我的回忆</a>
+                        <a href="#about" class="px-8 py-3 border border-gray-300 text-black font-medium rounded-md hover:bg-gray-100 transition duration-300">关于我</a>
+                    </div>
+                </div>
+                
+                <!-- 右侧图片 -->
+                <div class="md:w-3/5 relative">
+                    <div class="aspect-[16/9] rounded-lg overflow-hidden">
+                        <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/c053d5a7430742fbad875a6a6fe02455~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=2026011808340118D00B869B1A418DC0C1&amp;rrcfp=e75484ac&amp;x-expires=1769301241&amp;x-signature=dA304qpe%2FUi5Xq%2BFumzFWDMIi%2Bo%3D" alt="Wang's Memory - Designer" class="w-full h-full object-cover">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 作品展示区 -->
+    <section id="works" class="py-24 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold mb-16 text-center">我的回忆</h2>
+            
+            <!-- 作品列表 -->
+            <div class="space-y-12">
+
+                
+                <!-- 作品2 -->
+                <div class="work-card bg-white rounded-lg overflow-hidden shadow-sm flex flex-col md:flex-row">
+                    <!-- 左侧文字内容 -->
+                    <div class="md:w-1/2 p-6 flex flex-col justify-center relative">
+                        <div class="absolute top-6 left-6 text-gray-400 text-sm">2025/07/01</div>
+                        <h3 class="text-xl font-semibold mb-2 mt-4">摆摊体验</h3>
+                        <p class="text-gray-600 mb-4">在高考之前就和同学约定好要去摆摊试试，从购置材料，配置产品，营销创新都是从零做起。感受到了摆上一天也没人来购买的失落，也经历了赶末班地铁的狼狈。现在想了想很多时候这不是一句普通的赚钱好累可以概括的。</p>
+                        <p class="text-gray-600 mb-4">实际上摆摊很有意思，像是一次小创业。我学到的不只是赚钱的辛苦，更是你要面对你尽心尽力完成的产品却无人相中的无力感，要能承受每次舟车的劳累，更要有每次经营完后的自我反思，只能说摆摊这种事看着简单但受益匪浅。</p>
+                        <div class="px-4 py-2 bg-gray-100 rounded-full text-sm inline-block">创业&amp;挫折</div>
+                    </div>
+                    <!-- 右侧图片轮播 -->
+                    <div class="md:w-1/2 relative overflow-hidden aspect-[4/3]">
+                        <div class="carousel-container relative h-full">
+                            <div class="carousel-slides flex transition-transform duration-500 h-full">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/2a66b96fcfd14985a6a0f569a3603cf6~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=2026011808402721042774CC60FB8EB9B9&amp;rrcfp=e75484ac&amp;x-expires=1769301628&amp;x-signature=L%2B3zqCR%2B7jXbA8AD2raUO%2B2WnWM%3D" alt="Modern Website Design" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/b6d2e0695aa14ef7be5501a9ed12c524~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=20260118084036965F6D2550EAB894CABB&amp;rrcfp=e75484ac&amp;x-expires=1769301637&amp;x-signature=b30mboLDz8yUrqsi5M9c8bxll8Q%3D" alt="Modern Website Design" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/4b78c4bb997e47d39a1760097115635d~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=202601180840121FC5D7D63C1C1A41D0C3&amp;rrcfp=e75484ac&amp;x-expires=1769301612&amp;x-signature=6JjAVkCPnFapwAAjcacIRZA9QuM%3D" alt="Modern Website Design" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/e3c963b86b87488cbb44a9dd19e61db4~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=20260118084355925711844A16573F8880&amp;rrcfp=e75484ac&amp;x-expires=1769301836&amp;x-signature=vOndkA1ukGiknGB5Thh2l3QUQOc%3D" alt="Modern Website Design" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/ae2732e6e3e34ac6b56931505ceb0ee1~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=2026011808421603CC70A223A4DC8A1621&amp;rrcfp=e75484ac&amp;x-expires=1769301737&amp;x-signature=2NsSLYuBuh3fOlOVTcziviXf7bU%3D" alt="Modern Website Design" class="w-full h-full object-cover flex-shrink-0">
+                            </div>
+                            <button class="carousel-prev absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none">
+                                <i class="fa fa-chevron-left"></i>
+                            </button>
+                            <button class="carousel-next absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none">
+                                <i class="fa fa-chevron-right"></i>
+                            </button>
+                            <div class="carousel-indicators absolute bottom-2 left-0 right-0 flex justify-center space-x-2">
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-100 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 作品3 -->
+                <div class="work-card bg-white rounded-lg overflow-hidden shadow-sm flex flex-col md:flex-row">
+                    <!-- 左侧文字内容 -->
+                    <div class="md:w-1/2 p-6 flex flex-col justify-center relative">
+                        <div class="absolute top-6 left-6 text-gray-400 text-sm">2025/07/18</div>
+                        <h3 class="text-xl font-semibold mb-2 mt-4">暑期欢乐谷&amp;摩天轮</h3>
+                        <p class="text-gray-600 mb-4">只能说高考结束就想放肆玩上一轮，和初中同学约好去了深圳欢乐谷，其实是在成绩出的前一天去的，有种莫名的紧张又放松的感觉（过山车没做到有点可惜）</p>
+                        <p class="text-gray-600 mb-4">摩天轮就是后面才去的了，和高中的好朋友，因为也是高考前约定好了所以还是很期待的。在摩天轮上不得不感叹，深圳是如此繁华，如此摩天大楼在夜里闪闪发光让人惊叹这座城市所散发出来的都市魅力。</p>
+                        <div class="px-4 py-2 bg-gray-100 rounded-full text-sm inline-block">游乐场&amp;摩天轮</div>
+                    </div>
+                    <!-- 右侧图片轮播 -->
+                    <div class="md:w-1/2 relative overflow-hidden aspect-[4/3]">
+                        <div class="carousel-container relative h-full">
+                            <div class="carousel-slides flex transition-transform duration-500 h-full">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/a3d7c2bf2c2d4cedb38e002d65a9494e~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=202601180850504D0E0C792996E29A9332&amp;rrcfp=e75484ac&amp;x-expires=1769302250&amp;x-signature=%2BswaLaLWDv3GoNJHrr8QYO7H9Zs%3D" alt="Modern Website Design" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/9840f70a95094d3687c944f9c7852dd6~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=202601180909573C56D75BA4B3729A402F&amp;rrcfp=e75484ac&amp;x-expires=1769303398&amp;x-signature=yDwKukDEPQaFdfOuk62D7qCU%2F%2Fk%3D" alt="Modern Website Design" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/6736836dd46841a8872eca7175a18ba9~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=2026011808502591F401E2784A3390FBB8&amp;rrcfp=e75484ac&amp;x-expires=1769302226&amp;x-signature=%2BJ0r%2Bm%2FqZ8JkUzBKZRwTbLQt56Q%3D" alt="Modern Website Design" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/a21e4d7f22dc490b988ddb05a7b6996f~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=20260118091009DC18D8F343CF6341F3F1&amp;rrcfp=e75484ac&amp;x-expires=1769303409&amp;x-signature=h0J6fzG9IHaA%2FyC4Vu%2BAG1Hw5T4%3D" alt="Modern Website Design" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/44cb39d3dde2415aa6d95cc8dd3ee0e2~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=20260118090947A9404C793278538CE329&amp;rrcfp=e75484ac&amp;x-expires=1769303388&amp;x-signature=WE2Qfxl6jaGn0uXdJcVcFMiRTVw%3D" alt="Modern Website Design" class="w-full h-full object-cover flex-shrink-0">
+                            </div>
+                            <button class="carousel-prev absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none">
+                                <i class="fa fa-chevron-left"></i>
+                            </button>
+                            <button class="carousel-next absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none">
+                                <i class="fa fa-chevron-right"></i>
+                            </button>
+                            <div class="carousel-indicators absolute bottom-2 left-0 right-0 flex justify-center space-x-2">
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-100 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+
+                
+                <!-- 作品5 -->
+                <div class="work-card bg-white rounded-lg overflow-hidden shadow-sm flex flex-col md:flex-row">
+                    <!-- 左侧文字内容 -->
+                    <div class="md:w-1/2 p-6 flex flex-col justify-center relative">
+                        <div class="absolute top-6 left-6 text-gray-400 text-sm">2025/08/09</div>
+                        <h3 class="text-xl font-semibold mb-2 mt-4">暴风里的双月湾</h3>
+                        <p class="text-gray-600 mb-4">对，很难得的和初中好朋友们又聚了一回，这次是人齐的！去了惠州双月湾，就是好巧不巧赶上了台风季节。不过即使是台风季节人也没想象中的少，当然台风中的海滩倒也不常见不是吗。</p>
+                        <p class="text-gray-600 mb-4">所以说就像是很多时候计划准备好了却倒在了早点睡觉这最后一关上，很多时候计划好的和实际上的出入很大。但是我还是很享受这段旅程，所以我觉得回忆才是珍贵的，不论它是好还是坏，珍贵是回忆的客观事实。</p>
+                        <div class="px-4 py-2 bg-gray-100 rounded-full text-sm inline-block">沙滩&amp;台风</div>
+                    </div>
+                    <!-- 右侧图片轮播 -->
+                    <div class="md:w-1/2 relative overflow-hidden aspect-[4/3]">
+                        <div class="carousel-container relative h-full">
+                            <div class="carousel-slides flex transition-transform duration-500 h-full">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/5a2dfe3ebbf6422a82fe0f9c651b1c5e~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=20260118085907333B83487859227915AD&amp;rrcfp=e75484ac&amp;x-expires=1769302748&amp;x-signature=24Rp0IgKSP8JUIQBzxV74MIaZuA%3D" alt="UX Research Visualization" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/672b1068e15c40babe914399a3734d69~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=202601180858232AD0E9AF67FF0E422EF2&amp;rrcfp=e75484ac&amp;x-expires=1769302703&amp;x-signature=uIOh5BMUkTA%2Fl%2FILmLvRS5ta3%2BA%3D" alt="UX Research Visualization" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/675c390e539141cf9703066261ce8ed6~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=2026011808583140E334F4656705B7A399&amp;rrcfp=e75484ac&amp;x-expires=1769302711&amp;x-signature=V9ztKsC9n4uOG3kOj3gNDS%2B0EV4%3D" alt="UX Research Visualization" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/298ad955fc2144f1bae33eb970cf8360~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=2026011808585699DF92A2547B3E3D5296&amp;rrcfp=e75484ac&amp;x-expires=1769302737&amp;x-signature=xHn4Thfk72wmpHPglCMqfH%2F9j4o%3D" alt="UX Research Visualization" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/a8e0bfd088c0434fa393669ef5956521~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=2026011808583836F35B66D1B4478EA9FD&amp;rrcfp=e75484ac&amp;x-expires=1769302718&amp;x-signature=Fxuts2ZStgyOUcWGefD7AjAaDBU%3D" alt="UX Research Visualization" class="w-full h-full object-cover flex-shrink-0">
+                            </div>
+                            <button class="carousel-prev absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none">
+                                <i class="fa fa-chevron-left"></i>
+                            </button>
+                            <button class="carousel-next absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none">
+                                <i class="fa fa-chevron-right"></i>
+                            </button>
+                            <div class="carousel-indicators absolute bottom-2 left-0 right-0 flex justify-center space-x-2">
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-100 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 作品6 -->
+                <div class="work-card bg-white rounded-lg overflow-hidden shadow-sm flex flex-col md:flex-row">
+                    <!-- 左侧文字内容 -->
+                    <div class="md:w-1/2 p-6 flex flex-col justify-center relative">
+                        <div class="absolute top-6 left-6 text-gray-400 text-sm">2025/09/20</div>
+                        <h3 class="text-xl font-semibold mb-2 mt-4">大学军训</h3>
+                        <p class="text-gray-600 mb-4">嗯，大学开学就来军训，多累其实已经忘记了，只知道结营那天很开心。感觉是结营和真正地踏入大学生活叠加的快乐。</p>
+                        <p class="text-gray-600 mb-4">军训军训，如果不出意外这就是我最后一次军训了，也没什么很特殊也没什么很难忘，但是就算如此稀松平常，它也是我珍贵的回忆之一。</p>
+                        <div class="px-4 py-2 bg-gray-100 rounded-full text-sm inline-block">军训&amp;演唱会</div>
+                    </div>
+                    <!-- 右侧图片轮播 -->
+                    <div class="md:w-1/2 relative overflow-hidden aspect-[4/3]">
+                        <div class="carousel-container relative h-full">
+                            <div class="carousel-slides flex transition-transform duration-500 h-full">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/6810be3d1bd648ca81d7114651315c7a~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=20260118085949638793F68D405B927015&amp;rrcfp=e75484ac&amp;x-expires=1769302790&amp;x-signature=UjxsNTlNaje%2BXfoMpIOgwFE0Igk%3D" alt="3D Product Rendering" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/1b80e54d95304f4f98db73d8fc72c695~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=20260118090046291E658BC0238E444B39&amp;rrcfp=e75484ac&amp;x-expires=1769302847&amp;x-signature=PCZSxQpgrr%2FIhHmtD4j%2BRKr2F7g%3D" alt="3D Product Rendering" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/fb7eb919e96345b79419a11f4e338a79~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=20260118085958232F39A651B191974828&amp;rrcfp=e75484ac&amp;x-expires=1769302799&amp;x-signature=Wu6a%2FWUuIoaPnqRk8s0YB8GqkwM%3D" alt="3D Product Rendering" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/974915c7692d44c0897bc1702502835e~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=202601180859400378966A27250FB2A40B&amp;rrcfp=e75484ac&amp;x-expires=1769302781&amp;x-signature=3LaGTMkCgogyFdm9pA1h3OH6x98%3D" alt="3D Product Rendering" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/662c346c7d734c1ca0706c556650e67b~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=2026011809003538D627192882EE7A3682&amp;rrcfp=e75484ac&amp;x-expires=1769302836&amp;x-signature=pGD%2BlHS5XVVjMpDwJj6bV0IinQk%3D" alt="3D Product Rendering" class="w-full h-full object-cover flex-shrink-0">
+                            </div>
+                            <button class="carousel-prev absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none">
+                                <i class="fa fa-chevron-left"></i>
+                            </button>
+                            <button class="carousel-next absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none">
+                                <i class="fa fa-chevron-right"></i>
+                            </button>
+                            <div class="carousel-indicators absolute bottom-2 left-0 right-0 flex justify-center space-x-2">
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-100 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+
+                
+                <!-- 作品8 -->
+                <div class="work-card bg-white rounded-lg overflow-hidden shadow-sm flex flex-col md:flex-row">
+                    <!-- 左侧文字内容 -->
+                    <div class="md:w-1/2 p-6 flex flex-col justify-center relative">
+                        <div class="absolute top-6 left-6 text-gray-400 text-sm">2025/10/05</div>
+                        <h3 class="text-xl font-semibold mb-2 mt-4">同大学朋友一起</h3>
+                        <p class="text-gray-600 mb-4">国庆期间没回去深圳，待在韶关想着看看这个城市。韶关很慢很慢，感觉大家都不急有种独特的慵懒感，最着急的也许是路边被抢走食物的野猫了吧哈哈哈。</p>
+                        <p class="text-gray-600 mb-4">这段时间我开始拍摄了，也因为这段时间我明白了，我拍摄的目的“留住我所能留住的一切记忆，如果记不住就用快门将它定格成永恒。” 而我也在努力精进自己的技术让自己的照片更加“有话可说”</p>
+                        <div class="px-4 py-2 bg-gray-100 rounded-full text-sm inline-block">探险&amp;拍摄</div>
+                    </div>
+                    <!-- 右侧图片轮播 -->
+                    <div class="md:w-1/2 relative overflow-hidden aspect-[4/3]">
+                        <div class="carousel-container relative h-full">
+                            <div class="carousel-slides flex transition-transform duration-500 h-full">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/70e294349cd64fcdb73fdfe2ee50f490~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=202601180914387B9133D7A65FBC46232D&amp;rrcfp=e75484ac&amp;x-expires=1769303679&amp;x-signature=NLYUiWaBx%2FHbSEEtmSQU2lpdAl0%3D" alt="Mobile App UI" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/7cfc1cef6cf0448f8e85b9d4897d7f78~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=2026011809010667C6B58BE034778CDD95&amp;rrcfp=e75484ac&amp;x-expires=1769302867&amp;x-signature=0k5mYiVhGY2nwlZWpww9sKOHSyQ%3D" alt="Mobile App UI" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/345d59fc56504589b1e32b4463b19bc0~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=202601180914203F667E64373A8041F9E9&amp;rrcfp=e75484ac&amp;x-expires=1769303660&amp;x-signature=aMvmLlO5hu6aUPB5JS%2BPE1GQ3dg%3D" alt="Mobile App UI" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/9ac8146fc4a0445b9b82271c6315bb0f~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=202601180901380F9D53AA686E6547375B&amp;rrcfp=e75484ac&amp;x-expires=1769302899&amp;x-signature=w7f83KF0DEyxp4v9Em6pBKceyZU%3D" alt="Mobile App UI" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/b735612872b94d2f9b4698c07d960129~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=2026011809150959580FE92EE9BB9A6D67&amp;rrcfp=e75484ac&amp;x-expires=1769303709&amp;x-signature=6pNkcVhMiZkkY2kcbSk0%2Ft9HUeg%3D" alt="Mobile App UI" class="w-full h-full object-cover flex-shrink-0">
+                            </div>
+                            <button class="carousel-prev absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none">
+                                <i class="fa fa-chevron-left"></i>
+                            </button>
+                            <button class="carousel-next absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none">
+                                <i class="fa fa-chevron-right"></i>
+                            </button>
+                            <div class="carousel-indicators absolute bottom-2 left-0 right-0 flex justify-center space-x-2">
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-100 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 作品9 -->
+                <div class="work-card bg-white rounded-lg overflow-hidden shadow-sm flex flex-col md:flex-row">
+                    <!-- 左侧文字内容 -->
+                    <div class="md:w-1/2 p-6 flex flex-col justify-center relative">
+                        <div class="absolute top-6 left-6 text-gray-400 text-sm">2025/10/12</div>
+                        <h3 class="text-xl font-semibold mb-2 mt-4">拍摄英语微电影</h3>
+                        <p class="text-gray-600 mb-4">一共是拍摄了两次，但是第一次算是我主导的也是很感谢英语老师给了我们这么一个选题。拍微电影确实不是简单的事情，从剧本到分镜到拍摄再到剪辑，每一步都是从零开始。</p>
+                        <p class="text-gray-600 mb-4">拍摄微电影我感受到了，团队的重要性，我很喜欢大家对于一个镜头怎么拍好而产生的头脑风暴。我也要学会很多时候领导组织者做的不是让大家认同自己的观点而是可以在所有观点中找到最好的那一个，并让大家都信服。</p>
+                        <div class="px-4 py-2 bg-gray-100 rounded-full text-sm inline-block">拍摄&amp;英语</div>
+                    </div>
+                    <!-- 右侧图片轮播 -->
+                    <div class="md:w-1/2 relative overflow-hidden aspect-[4/3]">
+                        <div class="carousel-container relative h-full">
+                            <div class="carousel-slides flex transition-transform duration-500 h-full">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/afbe806c5054400db82a6b02752de2cd~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=202601180904475B409E593C593C4F16B6&amp;rrcfp=e75484ac&amp;x-expires=1769303088&amp;x-signature=KpfXy7JlBVKcLofodb2Es5UzG%2Bo%3D" alt="Colorful Packaging Design" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/ca7fe76512d74d5881f0517a1c06fe66~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=20260118090529547FA1B87C5DDD7A81F9&amp;rrcfp=e75484ac&amp;x-expires=1769303129&amp;x-signature=fYGqHrV%2FtD5KvuQ%2Bzmr30HIg5lE%3D" alt="Colorful Packaging Design" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/f84554c5a3ca416a833aef6a6ed7e802~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=20260118090205558B9692AE45798FF692&amp;rrcfp=e75484ac&amp;x-expires=1769302926&amp;x-signature=6ayZ85%2FSJuaAms5Ft3fvUPIPGrM%3D" alt="Colorful Packaging Design" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/15bed67b276647e0b8de10bd24656871~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=202601180904393239578C93D2AA8CEE63&amp;rrcfp=e75484ac&amp;x-expires=1769303080&amp;x-signature=ZN62sV4QoHEKbbJ2mC9jKza6lgw%3D" alt="Colorful Packaging Design" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/05817d39c9e442caaebdf723edd74d36~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=20260118090214FCB71D6BCF89948FCB77&amp;rrcfp=e75484ac&amp;x-expires=1769302935&amp;x-signature=WGgSF9JycWvlweR1Kp9xAjiTugQ%3D" alt="Colorful Packaging Design" class="w-full h-full object-cover flex-shrink-0">
+                            </div>
+                            <button class="carousel-prev absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none">
+                                <i class="fa fa-chevron-left"></i>
+                            </button>
+                            <button class="carousel-next absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none">
+                                <i class="fa fa-chevron-right"></i>
+                            </button>
+                            <div class="carousel-indicators absolute bottom-2 left-0 right-0 flex justify-center space-x-2">
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-100 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 作品10 -->
+                <div class="work-card bg-white rounded-lg overflow-hidden shadow-sm flex flex-col md:flex-row">
+                    <!-- 左侧文字内容 -->
+                    <div class="md:w-1/2 p-6 flex flex-col justify-center relative">
+                        <div class="absolute top-6 left-6 text-gray-400 text-sm">2025/10/30</div>
+                        <h3 class="text-xl font-semibold mb-2 mt-4">社团&amp;部门</h3>
+                        <p class="text-gray-600 mb-4">社团部门，是我上大学尤为关注的一点，开始的心血来潮加了两个社团两个部门。说好听点是全面发展实际上是完全忙不过来。</p>
+                        <p class="text-gray-600 mb-4">这两个社团两个部门内，我教练很多新朋友，因为大家都是因为相同爱好聚在一起感觉比班级成员更加要好。可惜是街舞社我没有很好地坚持下去，不只是其他部门任务重复我好像自己也不是很上心，希望以后我得慎重考虑再下决定。</p>
+                        <div class="px-4 py-2 bg-gray-100 rounded-full text-sm inline-block">朋友&amp;工作</div>
+                    </div>
+                    <!-- 右侧图片轮播 -->
+                    <div class="md:w-1/2 relative overflow-hidden aspect-[4/3]">
+                        <div class="carousel-container relative h-full">
+                            <div class="carousel-slides flex transition-transform duration-500 h-full">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/2d0ae0a5805c4848885bb02eb305755b~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=202601180917081047A45238C2B9482758&amp;rrcfp=e75484ac&amp;x-expires=1769303829&amp;x-signature=pj3Eaeet8v%2F5NVlmeUO4MnGjm48%3D" alt="3D Web Design" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/aa9b8b45afeb48ed9c040951a08c6759~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=2026011809161179CCB653A60C137E3262&amp;rrcfp=e75484ac&amp;x-expires=1769303772&amp;x-signature=KerlufEU6zYo6rpyioNmxnDhpCE%3D" alt="3D Web Design" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/4bf5429452c242f1b5e482a545d988a0~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=2026011809163093C9BEB8876A23425436&amp;rrcfp=e75484ac&amp;x-expires=1769303791&amp;x-signature=H5sgAsTQKV1%2FG7onSf34HV2FE4k%3D" alt="3D Web Design" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/920f203744134ddab6668490889392bb~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=2026011809165936E3377A31323B8FDDB0&amp;rrcfp=e75484ac&amp;x-expires=1769303819&amp;x-signature=75tVY7oQ%2Fxbmah%2BpKpTBwGf8eLI%3D" alt="3D Web Design" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/6b4b37cfdc144768aad439c98eaec95b~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=20260118091639CD873850B3CA1B9D01BC&amp;rrcfp=e75484ac&amp;x-expires=1769303800&amp;x-signature=gpbpVxff2qQxD3mProJgR312f84%3D" alt="3D Web Design" class="w-full h-full object-cover flex-shrink-0">
+                            </div>
+                            <button class="carousel-prev absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none">
+                                <i class="fa fa-chevron-left"></i>
+                            </button>
+                            <button class="carousel-next absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none">
+                                <i class="fa fa-chevron-right"></i>
+                            </button>
+                            <div class="carousel-indicators absolute bottom-2 left-0 right-0 flex justify-center space-x-2">
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-100 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 作品11 -->
+                <div class="work-card bg-white rounded-lg overflow-hidden shadow-sm flex flex-col md:flex-row">
+                    <!-- 左侧文字内容 -->
+                    <div class="md:w-1/2 p-6 flex flex-col justify-center relative">
+                        <div class="absolute top-6 left-6 text-gray-400 text-sm">2025/11/11</div>
+                        <h3 class="text-xl font-semibold mb-2 mt-4">摄影就是要摄影</h3>
+                        <p class="text-gray-600 mb-4">上大学第一件事就是学摄影学调色，是的，摄影对我也许有着别样的魔力，从小时候妈妈说我拍的好看到现在学习专业构图调色，我希望我的照片可以传达出更多情感，只有会说话的照片才是好照片。</p>
+                        <p class="text-gray-600 mb-4">我很容易忘记一些事情，回忆在我心中总是不那么清晰，所以我选择摄影让至少在我回忆的适合，我有迹可循。而精进摄影技术也是为了让我的照片可以承载更多的回忆更细腻的感情。加油！</p>
+                        <div class="px-4 py-2 bg-gray-100 rounded-full text-sm inline-block">心得&amp;摄影</div>
+                    </div>
+                    <!-- 右侧图片轮播 -->
+                    <div class="md:w-1/2 relative overflow-hidden aspect-[4/3]">
+                        <div class="carousel-container relative h-full">
+                            <div class="carousel-slides flex transition-transform duration-500 h-full">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/fe0e24fafd454ecbbf4f49ed180c7722~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=2026011809074644DE560D1EE62490EFC4&amp;rrcfp=e75484ac&amp;x-expires=1769303266&amp;x-signature=4kd739Yrtb%2FGz3BMiASIThtZbM4%3D" alt="Product Sketch" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/bd2cb4913c354c90a04406dd3191e9c9~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=20260118090752F4AD80C0D89EC7464B18&amp;rrcfp=e75484ac&amp;x-expires=1769303273&amp;x-signature=1SicTh3nGby4q9cDY8Xc%2BonTbeM%3D" alt="Product Sketch" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/5eae2be6521447fea4a8825fba0c55f3~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=202601180907087BCCA14098824B40D5C6&amp;rrcfp=e75484ac&amp;x-expires=1769303228&amp;x-signature=xqs5DWk5BNobvZzjRisieYMJbtI%3D" alt="Product Sketch" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/32684dee13c64114891f0f29285bdc66~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=20260118090802228D84C1131F3C7CF1D3&amp;rrcfp=e75484ac&amp;x-expires=1769303283&amp;x-signature=kNYAqM6bmilqTFDByAFsOUukZp4%3D" alt="Product Sketch" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/f08893862e5a4c5087c9b28609528572~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=2026011809154588E42EAB64A022897B19&amp;rrcfp=e75484ac&amp;x-expires=1769303745&amp;x-signature=gVGxuUlB8xRqV%2FfpNSBdm3z8%2Bng%3D" alt="Product Sketch" class="w-full h-full object-cover flex-shrink-0">
+                            </div>
+                            <button class="carousel-prev absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none">
+                                <i class="fa fa-chevron-left"></i>
+                            </button>
+                            <button class="carousel-next absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none">
+                                <i class="fa fa-chevron-right"></i>
+                            </button>
+                            <div class="carousel-indicators absolute bottom-2 left-0 right-0 flex justify-center space-x-2">
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-100 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 作品1 -->
+                <div class="work-card bg-white rounded-lg overflow-hidden shadow-sm flex flex-col md:flex-row">
+                    <!-- 左侧文字内容 -->
+                    <div class="md:w-1/2 p-6 flex flex-col justify-center relative">
+                        <div class="absolute top-6 left-6 text-gray-400 text-sm">2025/11/24</div>
+                        <h3 class="text-xl font-semibold mb-2 mt-4">广州行</h3>
+                        <p class="text-gray-600 mb-4">我从来不会后悔此行，况且此行又是那么完美。打着去广州参加法国高校交流会的名义，我我前一天来到了广州，在这一天进行了超级特种兵形式，大致逛了逛广州认识了这座上次没能认识的城市</p>
+                        <p class="text-gray-600 mb-4">广州给我的感觉我不清楚了，其实就和一般大都市没啥区别。但是我很感激和我同行的朋友和在广州认识的朋友，我们一起闲逛一起吃饭一起拍摄，这段回忆也许我能记上很久。</p>
+                        <div class="px-4 py-2 bg-gray-100 rounded-full text-sm inline-block">旅行&amp;展会</div>
+                    </div>
+                    <!-- 右侧图片轮播 -->
+                    <div class="md:w-1/2 relative overflow-hidden aspect-[4/3]">
+                        <div class="carousel-container relative h-full">
+                            <div class="carousel-slides flex transition-transform duration-500 h-full">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/b18b0c3a3d154adc8dc89be1a8625482~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=20260118090831ACCF47C3133D9643348B&amp;rrcfp=e75484ac&amp;x-expires=1769303311&amp;x-signature=t%2FDqJM5Qi05xd6VkdtoW0Z%2FSkM8%3D" alt="Mobile App UI Design" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/70cbf1186e0148b88a58f20694a6a9ee~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=202601180908363315B4F6453C1E7D5CE3&amp;rrcfp=e75484ac&amp;x-expires=1769303316&amp;x-signature=o%2FaGwk9EksmBN2V7%2Femii98946E%3D" alt="Mobile App UI Design" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/00e6d0061e0c4e87a274d2fbaea5fe33~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=20260118090904A2F9196D69F92B44B288&amp;rrcfp=e75484ac&amp;x-expires=1769303344&amp;x-signature=9VYaf5%2F9FGYwxxyxhRd2qXBMfyI%3D" alt="Mobile App UI Design" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/41d7dade850542a3827ea5c5de37e683~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=202601180908440E6CF8C22A85237E92ED&amp;rrcfp=e75484ac&amp;x-expires=1769303325&amp;x-signature=kUHdtKuBl2V08znfxZLIGrtoCqo%3D" alt="Mobile App UI Design" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/d7b7a44d052d4aefa8a683e5d1172e96~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=20260118090824ADF3309D8BF5B646D5BA&amp;rrcfp=e75484ac&amp;x-expires=1769303305&amp;x-signature=ttySO8J5sF0yJTAizzKNfL2O5%2Fw%3D" alt="Mobile App UI Design" class="w-full h-full object-cover flex-shrink-0">
+                            </div>
+                            <button class="carousel-prev absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none">
+                                <i class="fa fa-chevron-left"></i>
+                            </button>
+                            <button class="carousel-next absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none">
+                                <i class="fa fa-chevron-right"></i>
+                            </button>
+                            <div class="carousel-indicators absolute bottom-2 left-0 right-0 flex justify-center space-x-2">
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-100 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 作品4 -->
+                <div class="work-card bg-white rounded-lg overflow-hidden shadow-sm flex flex-col md:flex-row">
+                    <!-- 左侧文字内容 -->
+                    <div class="md:w-1/2 p-6 flex flex-col justify-center relative">
+                        <div class="absolute top-6 left-6 text-gray-400 text-sm">2025/12/07</div>
+                        <h3 class="text-xl font-semibold mb-2 mt-4">忆往高中</h3>
+                        <p class="text-gray-600 mb-4">难得以往的高中要举办校区，蹭着这个机会回到了母校，也让我不经怀念起以前的时光。虽然我嘴上说高中同学什么什么的，但是转头一看高中所认识的的朋友都很可爱。</p>
+                        <p class="text-gray-600 mb-4">我想也许这个学校没什么好值得怀念的，只是我的三年努力还有和我一起努力的同学朋友们让我无限怀念。是啊怀念的终究不是什么物件而是人才值得怀念。我会好好珍惜这些段关系的。</p>
+                        <div class="px-4 py-2 bg-gray-100 rounded-full text-sm inline-block">探母校&amp;见朋友</div>
+                    </div>
+                    <!-- 右侧图片轮播 -->
+                    <div class="md:w-1/2 relative overflow-hidden aspect-[4/3]">
+                        <div class="carousel-container relative h-full">
+                            <div class="carousel-slides flex transition-transform duration-500 h-full">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/5c9ee58c875c47e79270fde5cddb31f7~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=20260118085153C18280F286C29290F0AB&amp;rrcfp=e75484ac&amp;x-expires=1769302313&amp;x-signature=L7JHeO8Eja3trawjb8%2B3%2F0Q9mzI%3D" alt="Product Design Sketches" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/eca1e0bcc889451cba6fe5c7a8173888~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=20260118085421C15B553ABB4EB68F0C1F&amp;rrcfp=e75484ac&amp;x-expires=1769302462&amp;x-signature=ODLDXftkmjK5VfMQdewMsbrdUDo%3D" alt="Product Design Sketches" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/c95d4c12a6ab425db7f7c3987925deb6~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=202601180852035753A80EEE5F7D9704DF&amp;rrcfp=e75484ac&amp;x-expires=1769302323&amp;x-signature=zVN6KBp2VPPspj9qKMv4swip%2B%2Bw%3D" alt="Product Design Sketches" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/74074ceadcf346259e404054dd005f5f~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=202601180854305BA883CB01FA1C8D7648&amp;rrcfp=e75484ac&amp;x-expires=1769302470&amp;x-signature=wNf39cYwDI3aBuMJoawPTj%2FOYmg%3D" alt="Product Design Sketches" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/54292608f13e42efa347e7cf1877ab53~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=20260118091334B799956E41262A4654A6&amp;rrcfp=e75484ac&amp;x-expires=1769303615&amp;x-signature=Ccg0ujV8al80w%2FwT9dQWs7JCEwA%3D" alt="Product Design Sketches" class="w-full h-full object-cover flex-shrink-0">
+                            </div>
+                            <button class="carousel-prev absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none">
+                                <i class="fa fa-chevron-left"></i>
+                            </button>
+                            <button class="carousel-next absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none">
+                                <i class="fa fa-chevron-right"></i>
+                            </button>
+                            <div class="carousel-indicators absolute bottom-2 left-0 right-0 flex justify-center space-x-2">
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-100 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 作品12 -->
+                <div class="work-card bg-white rounded-lg overflow-hidden shadow-sm flex flex-col md:flex-row">
+                    <!-- 左侧文字内容 -->
+                    <div class="md:w-1/2 p-6 flex flex-col justify-center relative">
+                        <div class="absolute top-6 left-6 text-gray-400 text-sm">2026/01/09</div>
+                        <h3 class="text-xl font-semibold mb-2 mt-4">19岁生日</h3>
+                        <p class="text-gray-600 mb-4">19岁生日的那晚我独自一人去到外面酒吧给自己庆祝了，孤单吗？我觉得是否认的，我很享受独自一人庆祝自己又大一岁的感觉，很自由很舒服。</p>
+                        <p class="text-gray-600 mb-4">实际上大学朋友也有来给我庆生的，不论是现实还是线下我都很感动，还好我忍住了要不然也许在他们给我庆生时我会说句“我爱你们”</p>
+                        <div class="px-4 py-2 bg-gray-100 rounded-full text-sm inline-block">生日&amp;聚会</div>
+                    </div>
+                    <!-- 右侧图片轮播 -->
+                    <div class="md:w-1/2 relative overflow-hidden aspect-[4/3]">
+                        <div class="carousel-container relative h-full">
+                            <div class="carousel-slides flex transition-transform duration-500 h-full">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/d5cb89db0b0140e19b1cca1ec6aa0cb9~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=2026011809065291F401E2784A3391E34C&amp;rrcfp=e75484ac&amp;x-expires=1769303213&amp;x-signature=OM1fUYPtrivJ0UIc21RzeCRnstU%3D" alt="Data Visualization" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/4e8d5c60e6fd413d8a7efc40d53bd723~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=20260118090632B8B7B11F9161F69772D0&amp;rrcfp=e75484ac&amp;x-expires=1769303193&amp;x-signature=6CyPvOhuqKJY6vdGFvyswvhPfyw%3D" alt="Data Visualization" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/3bfce39d0b7e437f9f7374c62bfe3287~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=2026011809061786EE7E1B76F0BC90A0A4&amp;rrcfp=e75484ac&amp;x-expires=1769303177&amp;x-signature=0VD5Aug4s2MXHJWN4edtj54ZvGY%3D" alt="Data Visualization" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/6d2a0d68c4e541359371fb2a982418c5~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=2026011809064399C2379457C2417D8C35&amp;rrcfp=e75484ac&amp;x-expires=1769303203&amp;x-signature=MpJ90QAxppgwhIdd1swUM1g43LI%3D" alt="Data Visualization" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/a7c7da9062514cd2af365f565d8c4447~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=20260118090625965795B68A58664235A8&amp;rrcfp=e75484ac&amp;x-expires=1769303185&amp;x-signature=sJFgn8ApDV2JLKrNLcXzsUlEYJo%3D" alt="Data Visualization" class="w-full h-full object-cover flex-shrink-0">
+                            </div>
+                            <button class="carousel-prev absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none">
+                                <i class="fa fa-chevron-left"></i>
+                            </button>
+                            <button class="carousel-next absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none">
+                                <i class="fa fa-chevron-right"></i>
+                            </button>
+                            <div class="carousel-indicators absolute bottom-2 left-0 right-0 flex justify-center space-x-2">
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-100 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 作品13 -->
+                <div class="work-card bg-white rounded-lg overflow-hidden shadow-sm flex flex-col md:flex-row">
+                    <!-- 左侧文字内容 -->
+                    <div class="md:w-1/2 p-6 flex flex-col justify-center relative">
+                        <div class="absolute top-6 left-6 text-gray-400 text-sm">2026/01/09</div>
+                        <h3 class="text-xl font-semibold mb-2 mt-4">大一上的学习平稳落地</h3>
+                        <p class="text-gray-600 mb-4">说实话大学确实不一样了，高中是智智智智智力发展，大学就是德智体美劳全部都给你了。当时我觉得我适应的很好，倒不如说我有这大学生的基本基础，所以过得还算游刃有余。</p>
+                        <p class="text-gray-600 mb-4">大一我说实话，过得很开心很自由很满足。好在是基本的学习也没太拉下，至少没有挂科我很庆幸。当然在这半年的适应期后我希望我的大一下可以更进一步，无限进步！</p>
+                        <div class="px-4 py-2 bg-gray-100 rounded-full text-sm inline-block">学习&amp;大一</div>
+                    </div>
+                    <!-- 右侧图片轮播 -->
+                    <div class="md:w-1/2 relative overflow-hidden aspect-[4/3]">
+                        <div class="carousel-container relative h-full">
+                            <div class="carousel-slides flex transition-transform duration-500 h-full">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/0488dd0611864998a09df50c59667a4d~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=20260118091218D7F04E97C831C28F6C43&amp;rrcfp=e75484ac&amp;x-expires=1769303539&amp;x-signature=f4Iw5rW0TcAwCWR6cUDbGapS868%3D" alt="Modern Logo Design" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/beff905f86c441af8ecf94d48d2424b8~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=20260118091143F5659BA19E6C7791AAF4&amp;rrcfp=e75484ac&amp;x-expires=1769303503&amp;x-signature=fw7dasNkt67OmsYJNYebEEfKsxg%3D" alt="Modern Logo Design" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/8bf46f3753604cb28d826cad2150b404~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=202601180911484B0019415BE30996DA13&amp;rrcfp=e75484ac&amp;x-expires=1769303509&amp;x-signature=35krNq%2FajAlTX%2BxLidqc8dX%2Fn7A%3D" alt="Modern Logo Design" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/6bae2d09416941ec82f124c7b5583cf2~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=202601180911566F744D865D6E43447951&amp;rrcfp=e75484ac&amp;x-expires=1769303517&amp;x-signature=cHE9rQuhL%2BySZPqpF2wZx%2FUx2Jo%3D" alt="Modern Logo Design" class="w-full h-full object-cover flex-shrink-0">
+                                <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/567904f3901149ad85f68c1cd014bb09~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=20260118091132D02587CDEB397994E01E&amp;rrcfp=e75484ac&amp;x-expires=1769303492&amp;x-signature=73x8EHUkaZc%2B9om49eyAn6D9Eac%3D" alt="Modern Logo Design" class="w-full h-full object-cover flex-shrink-0">
+                            </div>
+                            <button class="carousel-prev absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none">
+                                <i class="fa fa-chevron-left"></i>
+                            </button>
+                            <button class="carousel-next absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none">
+                                <i class="fa fa-chevron-right"></i>
+                            </button>
+                            <div class="carousel-indicators absolute bottom-2 left-0 right-0 flex justify-center space-x-2">
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-100 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                                <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于我区域 -->
+    <section id="about" class="py-24">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-top gap-12">
+                <div class="md:w-1/3">
+                    <div class="relative">
+                        <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/86ff4ff3c990407f88d24e4e37feebe2~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=2026011809183169B4F250E66EC47D4414&amp;rrcfp=e75484ac&amp;x-expires=1769303911&amp;x-signature=%2BVZl4GpO7nQFkwyPTpk%2FxvleQ1Q%3D" alt="Wang's Memory" class="w-full rounded-lg relative z-10">
+                    </div>
+                </div>
+                
+                <div class="md:w-2/3">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6">关于我</h2>
+                    <p class="text-gray-600 mb-6 leading-relaxed">你好，我是王睿熙，今年19是一名大学生。如果用几个词来形容自己我会使用：共情力，想象力，好奇心，慵懒感。我的爱好有音乐，游戏，拍摄，剪辑，骑行…… 音乐是我最大的爱好，倒不如说我一辈子都将热爱音乐（即使我五音不全）我涉猎的音乐类型广泛，也很希望可以听听你们爱听的音乐。拍摄是我近期的兴趣，因为我想将我身边的回忆一一记录下来。游戏也是我生活的一部分，如果你也想和我一起感受游戏的快乐我很乐意。</p>
+                    <p class="text-gray-600 mb-8 leading-relaxed">当然我也热爱社交，我很喜欢交朋友很喜欢去了解一个我不认识的人。事实上我很喜欢探索未知的事物，所以未知的事物都会勾起我的好奇心。所以朋友如果你也有故事，我很乐意倾听。我是王睿熙，请多多指教！</p>
+                    
+                    <!-- 技能 -->
+                    <div class="mb-12">
+                        <h3 class="text-xl font-semibold mb-4">技能&amp;爱好</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-4 py-2 bg-gray-100 rounded-full text-sm">拍摄</span>
+                            <span class="px-4 py-2 bg-gray-100 rounded-full text-sm">剪辑</span>
+                            <span class="px-4 py-2 bg-gray-100 rounded-full text-sm">音乐</span>
+                            <span class="px-4 py-2 bg-gray-100 rounded-full text-sm">骑行</span>
+                            <span class="px-4 py-2 bg-gray-100 rounded-full text-sm">游戏</span>
+                            <span class="px-4 py-2 bg-gray-100 rounded-full text-sm">电竞</span>
+                            <span class="px-4 py-2 bg-gray-100 rounded-full text-sm">二次元</span>
+                            <span class="px-4 py-2 bg-gray-100 rounded-full text-sm">旅行</span>
+                            <span class="px-4 py-2 bg-gray-100 rounded-full text-sm">吃饭</span>
+                            <span class="px-4 py-2 bg-gray-100 rounded-full text-sm">调色</span>
+                            <span class="px-4 py-2 bg-gray-100 rounded-full text-sm">记录</span>
+                            <span class="px-4 py-2 bg-gray-100 rounded-full text-sm">睡觉</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 经验和教育 -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 我的总结区域 -->
+    <section id="summary" class="py-24 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold mb-16 text-center">我的总结</h2>
+            <div class="max-w-3xl mx-auto">
+                <div class="prose prose-lg mx-auto">
+                    <p class="text-lg text-gray-600 mb-6">回顾过往，那些珍贵的回忆恰似繁星错落，点缀着我的生命长卷。每一次按下快门的瞬间，每一段精心剪辑的视频，每一次骑行时拂过耳畔的风，都化作了人生中浓墨重彩的篇章，无可替代。
+</p>
+                    <p class="text-lg text-gray-600 mb-6">音乐是我安放情感的港湾，更是我与世界共情的载体；游戏是我延展想象力的天地，任思绪在虚拟与现实间穿梭；而拍摄与剪辑，则让我得以将那些转瞬即逝的美好，凝练成永恒的回忆。这些热爱不仅填满了生活的缝隙，更在潜移默化中，塑造出了如今的我。
+</p>
+                    <p class="text-lg text-gray-600 mb-6">未来的日子里，我仍愿以镜头为笔描摹世界、定格回忆，以音乐为媒传递情感、联结彼此，以永不停歇的好奇心去探索未知的远方。因为我始终相信，生命里的每一个刹那都值得被妥帖珍藏，每一段回忆都值得在岁月里反复回味。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="py-12 bg-black text-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <h3 class="text-2xl font-bold">Wang‘s story</h3>
+                    <p class="text-gray-400 mt-2">我们无法衡量一个瞬间的价值，直到它变成了回忆。</p>
+                </div>
+                
+                <div class="flex space-x-6">
+                    
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm">
+                <p>© 2025 Wang’s story. </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 回到顶部按钮 -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 bg-black text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg opacity-0 invisible transition-all duration-300">
+        <i class="fa fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 轮播功能实现
+            const carouselContainers = document.querySelectorAll('.carousel-container');
+            
+            carouselContainers.forEach(container => {
+                const slides = container.querySelector('.carousel-slides');
+                const slideCount = slides.children.length;
+                const prevButton = container.querySelector('.carousel-prev');
+                const nextButton = container.querySelector('.carousel-next');
+                const indicators = container.querySelectorAll('.carousel-indicators button');
+                
+                let currentIndex = 0;
+                
+                // 更新轮播状态
+                function updateCarousel() {
+                    slides.style.transform = `translateX(-${currentIndex * 100}%)`;
+                    
+                    // 更新指示点状态
+                    indicators.forEach((indicator, index) => {
+                        if (index === currentIndex) {
+                            indicator.classList.add('bg-opacity-100');
+                            indicator.classList.remove('bg-opacity-50');
+                        } else {
+                            indicator.classList.remove('bg-opacity-100');
+                            indicator.classList.add('bg-opacity-50');
+                        }
+                    });
+                }
+                
+                // 下一张
+                function nextSlide() {
+                    currentIndex = (currentIndex + 1) % slideCount;
+                    updateCarousel();
+                }
+                
+                // 上一张
+                function prevSlide() {
+                    currentIndex = (currentIndex - 1 + slideCount) % slideCount;
+                    updateCarousel();
+                }
+                
+                // 点击指示点切换
+                indicators.forEach((indicator, index) => {
+                    indicator.addEventListener('click', () => {
+                        currentIndex = index;
+                        updateCarousel();
+                    });
+                });
+                
+                // 绑定按钮事件
+                if (prevButton) {
+                    prevButton.addEventListener('click', prevSlide);
+                }
+                
+                if (nextButton) {
+                    nextButton.addEventListener('click', nextSlide);
+                }
+                
+                // 自动轮播
+                let autoplayInterval = setInterval(nextSlide, 8000);
+                
+                // 鼠标悬停时暂停自动轮播
+                container.addEventListener('mouseenter', () => {
+                    clearInterval(autoplayInterval);
+                });
+                
+                // 鼠标离开时恢复自动轮播
+                container.addEventListener('mouseleave', () => {
+                    autoplayInterval = setInterval(nextSlide, 5000);
+                });
+            });
+            
+            // 修复作品3的图片，添加轮播功能
+            const work3Image = document.querySelector('.work-card:nth-child(3) .md\\:w-1\\/2 img');
+            if (work3Image && !work3Image.closest('.carousel-container')) {
+                const parentDiv = work3Image.parentElement;
+                const imageSrc = work3Image.src;
+                const imageAlt = work3Image.alt;
+                
+                // 创建轮播结构
+                const carouselHTML = `
+                    <div class="carousel-container relative h-full">
+                        <div class="carousel-slides flex transition-transform duration-500 h-full">
+                            <img src="${imageSrc}" alt="${imageAlt}" class="w-full h-full object-cover flex-shrink-0">
+                            <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/29449b1a007b4221921bce21be1e4dd2~tplv-a9rns2rl98-image.image?rcl=20251013163918FB6EAC6B654496E25F85&amp;rk3s=8e244e95&amp;rrcfp=2609e108&amp;x-expires=1760949563&amp;x-signature=B6ka6pttP6CFMPh%2FXj8k6xP63i4%3D" alt="${imageAlt}" class="w-full h-full object-cover flex-shrink-0">
+                            <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/520c2cb70ce74a5e873ecc213be07d49~tplv-a9rns2rl98-image.image?rcl=20251013162436B2ED504F4E124AF921CD&amp;rk3s=8e244e95&amp;rrcfp=2609e108&amp;x-expires=1760948681&amp;x-signature=mHPZrZeJjztdaF94jLEBa09ZNyE%3D" alt="${imageAlt}" class="w-full h-full object-cover flex-shrink-0">
+                            <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/90032b8a3adf4b169b1957cdb1e6afaf~tplv-a9rns2rl98-image.image?rcl=20251013164250F4993424CAEF794F6D63&amp;rk3s=8e244e95&amp;rrcfp=2609e108&amp;x-expires=1760949774&amp;x-signature=eeDe93hSK4rMUlCMb%2Bw0fxqLCuM%3D" alt="${imageAlt}" class="w-full h-full object-cover flex-shrink-0">
+                            <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/98c01d1c61c645778cdcb4e529a8882e~tplv-a9rns2rl98-image.image?rcl=20251013164023970D359F3CD4DADE7A59&amp;rk3s=8e244e95&amp;rrcfp=2609e108&amp;x-expires=1760949627&amp;x-signature=zU77Hv%2BXz8IMMwolvvRh7iQmasM%3D" alt="${imageAlt}" class="w-full h-full object-cover flex-shrink-0">
+                        </div>
+                        <button class="carousel-prev absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none">
+                            <i class="fa fa-chevron-left"></i>
+                        </button>
+                        <button class="carousel-next absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none">
+                            <i class="fa fa-chevron-right"></i>
+                        </button>
+                        <div class="carousel-indicators absolute bottom-2 left-0 right-0 flex justify-center space-x-2">
+                            <button class="w-2 h-2 rounded-full bg-white bg-opacity-100 focus:outline-none"></button>
+                            <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                            <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                            <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                            <button class="w-2 h-2 rounded-full bg-white bg-opacity-50 focus:outline-none"></button>
+                        </div>
+                    </div>
+                `;
+                
+                // 替换原有图片
+                parentDiv.innerHTML = carouselHTML;
+                
+                // 重新初始化轮播
+                const newContainer = parentDiv.querySelector('.carousel-container');
+                const newSlides = newContainer.querySelector('.carousel-slides');
+                const newSlideCount = newSlides.children.length;
+                const newPrevButton = newContainer.querySelector('.carousel-prev');
+                const newNextButton = newContainer.querySelector('.carousel-next');
+                const newIndicators = newContainer.querySelectorAll('.carousel-indicators button');
+                
+                let newCurrentIndex = 0;
+                
+                function updateNewCarousel() {
+                    newSlides.style.transform = `translateX(-${newCurrentIndex * 100}%)`;
+                    
+                    newIndicators.forEach((indicator, index) => {
+                        if (index === newCurrentIndex) {
+                            indicator.classList.add('bg-opacity-100');
+                            indicator.classList.remove('bg-opacity-50');
+                        } else {
+                            indicator.classList.remove('bg-opacity-100');
+                            indicator.classList.add('bg-opacity-50');
+                        }
+                    });
+                }
+                
+                function nextNewSlide() {
+                    newCurrentIndex = (newCurrentIndex + 1) % newSlideCount;
+                    updateNewCarousel();
+                }
+                
+                function prevNewSlide() {
+                    newCurrentIndex = (newCurrentIndex - 1 + newSlideCount) % newSlideCount;
+                    updateNewCarousel();
+                }
+                
+                newIndicators.forEach((indicator, index) => {
+                    indicator.addEventListener('click', () => {
+                        newCurrentIndex = index;
+                        updateNewCarousel();
+                    });
+                });
+                
+                if (newPrevButton) {
+                    newPrevButton.addEventListener('click', prevNewSlide);
+                }
+                
+                if (newNextButton) {
+                    newNextButton.addEventListener('click', nextNewSlide);
+                }
+                
+                let newAutoplayInterval = setInterval(nextNewSlide, 5000);
+                
+                newContainer.addEventListener('mouseenter', () => {
+                    clearInterval(newAutoplayInterval);
+                });
+                
+                newContainer.addEventListener('mouseleave', () => {
+                    newAutoplayInterval = setInterval(nextNewSlide, 5000);
+                });
+            }
+            // 移动端菜单切换
+            const menuToggle = document.getElementById('menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            menuToggle.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // 平滑滚动
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // 关闭移动菜单（如果打开）
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                    
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80, // 考虑导航栏高度
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // 导航栏滚动效果
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('bg-white', 'shadow-md');
+                    navbar.classList.remove('bg-opacity-95');
+                } else {
+                    navbar.classList.remove('shadow-md');
+                    navbar.classList.add('bg-opacity-95');
+                }
+            });
+            
+            // 回到顶部按钮
+            const backToTopButton = document.getElementById('back-to-top');
+            
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 300) {
+                    backToTopButton.classList.remove('opacity-0', 'invisible');
+                    backToTopButton.classList.add('opacity-100', 'visible');
+                } else {
+                    backToTopButton.classList.add('opacity-0', 'invisible');
+                    backToTopButton.classList.remove('opacity-100', 'visible');
+                }
+            });
+            
+            backToTopButton.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+            
+            // 滚动动画
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const fadeInOnScroll = function() {
+                fadeElements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    
+                    if (elementTop < windowHeight - 100) {
+                        element.classList.add('active');
+                    }
+                });
+            };
+            
+            // 初始检查
+            fadeInOnScroll();
+            
+            // 滚动时检查
+            window.addEventListener('scroll', fadeInOnScroll);
+            
+            // 使用 GSAP 添加更复杂的动画
+            if (typeof gsap !== 'undefined') {
+                // Hero 区域动画
+                gsap.from('#home h1', {
+                    opacity: 0,
+                    y: 50,
+                    duration: 1,
+                    delay: 0.2
+                });
+                
+                gsap.from('#home p', {
+                    opacity: 0,
+                    y: 30,
+                    duration: 1,
+                    delay: 0.5
+                });
+                
+                gsap.from('#home .flex', {
+                    opacity: 0,
+                    y: 20,
+                    duration: 1,
+                    delay: 0.8
+                });
+                
+                // 作品卡片动画
+                gsap.utils.toArray('.work-card').forEach((card, i) => {
+                    gsap.from(card, {
+                        scrollTrigger: {
+                            trigger: card,
+                            start: 'top bottom-=100',
+                            toggleActions: 'play none none none'
+                        },
+                        opacity: 0,
+                        y: 50,
+                        duration: 0.8,
+                        delay: i * 0.1
+                    });
+                });
+            }
+            
+            // 表单提交处理
+            const contactForm = document.getElementById('contact-form');
+            
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // 获取表单数据
+                    const formData = new FormData(contactForm);
+                    const formDataObject = {};
+                    
+                    formData.forEach((value, key) => {
+                        formDataObject[key] = value;
+                    });
+                    
+                    // 在实际应用中，这里会发送数据到服务器
+                    // 这里仅做演示，显示提交成功消息
+                    alert('Message sent successfully!');
+                    contactForm.reset();
+                });
+            }
+        });
+    </script>
+
+
+</body></html>
